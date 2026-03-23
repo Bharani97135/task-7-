@@ -4,8 +4,11 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+const express = require('express');
+const cors = require('cors'); // 1. Require panniyachu
 const app = express();
-app.use(cors());
+
+app.use(cors()); // 2. Use panna marakatheenga!
 app.use(express.json());
 
 // 1. MongoDB Connection
