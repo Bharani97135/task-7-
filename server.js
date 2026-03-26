@@ -1,22 +1,22 @@
-// server.js - Final Clean Code
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const express = require('express');
-const cors = require('cors'); // 1. Require panniyachu
 const app = express();
 
-app.use(cors()); // 2. Use panna marakatheenga!
-app.use(express.json());
+// 1. Middlewares
+app.use(express.json()); 
+app.use(cors({
+  origin: "*" // எல்லா ஃபிரண்ட்-எண்ட் லிங்கையும் அனுமதிக்கும்
+}));
 
-// 1. MongoDB Connection
+// 2. MongoDB Connection
 mongoose.connect('mongodb+srv://itachi:itachi*123@cluster0.thb8tpt.mongodb.net/?appName=Cluster0')
     .then(() => console.log('✅ MongoDB Connected Successfully!'))
     .catch((err) => console.error('❌ Connection Error:', err));
 
-// 2. User Schema
+// 3. User Schema
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -24,7 +24,12 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// 3. Register Route
+// 4. Root Route (சர்வர் வேலை செய்யுதான்னு செக் பண்ண)
+app.get("/", (req, res) => {
+    res.send("Server is running successfully!");
+});
+
+// 5. Register Route
 app.post('/api/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -41,7 +46,7 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-// 4. Login Route
+// 6. Login Route
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -57,7 +62,7 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
